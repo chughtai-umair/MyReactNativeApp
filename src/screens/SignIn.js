@@ -1,43 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SignIn = ({ navigation }) => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSignUp = async () => {
+    if (!username || !email || !password || !confirmPassword) {
+      Alert.alert("Error", "Please fill all fields.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match.");
+      return;
+    }
+
+    try {
+      await AsyncStorage.setItem(
+        "user",
+        JSON.stringify({ username, email, password })
+      );
+      Alert.alert("Success", "Account Created Successfully!");
+      navigation.replace("Login");
+    } catch (error) {
+      console.log("Error saving user:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.title}>Sign Up</Text>
+
       <TextInput
         style={styles.input}
         placeholder="User Name"
         placeholderTextColor="#888888"
+        value={username}
+        onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
         placeholder="Enter Email"
         placeholderTextColor="#888888"
+        value={email}
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
         placeholder="Enter Password"
         placeholderTextColor="#888888"
         secureTextEntry
+        value={password}
+        onChangeText={setPassword}
       />
       <TextInput
         style={styles.input}
         placeholder="Confirm Password"
         placeholderTextColor="#888888"
         secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
       />
+
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+        onPress={() => navigation.navigate("LogIn")}
       >
-        <Text style={styles.buttonText}>Back to Login</Text>
+        <Text style={styles.backButtonText}>
+          Already have an account? Login
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -73,14 +118,23 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#FFFFFF", // White button
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 10,
+    width: "100%",
+    alignItems: "center",
   },
   buttonText: {
     color: "#000000", // Black text
     fontSize: 16,
     fontWeight: "bold",
+  },
+  backButton: {
+    marginTop: 15,
+  },
+  backButtonText: {
+    color: "#BBBBBB",
+    fontSize: 14,
   },
 });

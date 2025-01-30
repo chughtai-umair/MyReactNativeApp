@@ -7,71 +7,74 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LogIn = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const validateAndLogin = () => {
+  const handleLogin = async () => {
     setError(""); // Clear previous errors
 
-    // Basic email validation using regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email.");
-      return; // Exit if email is invalid
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
     }
 
-    // Password validation (minimum 6 characters)
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
-      return; // Exit if password is too short
-    }
+    try {
+      const storedUser = await AsyncStorage.getItem("user");
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
 
-    // If validation passes
-    Alert.alert("Login Successful!", "Welcome back!");
-    navigation.navigate("SignIn"); // Navigate to SignIn screen
+        if (user.email === email && user.password === password) {
+          Alert.alert("Login Successful!", "Welcome back!");
+          navigation.replace("Home");
+        } else {
+          setError("Invalid email or password.");
+        }
+      } else {
+        setError("No account found. Please sign up.");
+      }
+    } catch (error) {
+      console.log("Error retrieving user:", error);
+      setError("An error occurred. Please try again.");
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
 
-      {/* Email Input */}
       <TextInput
         style={styles.input}
         placeholder="Enter Email"
         placeholderTextColor="#888888"
         value={email}
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={setEmail}
         keyboardType="email-address"
       />
 
-      {/* Password Input */}
       <TextInput
         style={styles.input}
         placeholder="Enter Password"
         placeholderTextColor="#888888"
         value={password}
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={setPassword}
         secureTextEntry
       />
 
-      {/* Display error message */}
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      {/* Login Button */}
-      <TouchableOpacity style={styles.button} onPress={validateAndLogin}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      {/* Sign In Link */}
       <TouchableOpacity
         style={styles.linkButton}
         onPress={() => navigation.navigate("SignIn")}
       >
-        <Text style={styles.linkText}>Don't have an account? Sign In</Text>
+        <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -111,16 +114,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     marginTop: 20,
+    width: "100%",
+    alignItems: "center",
   },
   buttonText: {
-    color: "#000000", // Black text for button
+    color: "#000000", // Black text
     fontSize: 16,
     fontWeight: "bold",
   },
-
   error: {
-    color: "red", // Red text for error messages
+    color: "red",
     fontSize: 14,
     marginBottom: 10,
+  },
+  linkButton: {
+    marginTop: 15,
+  },
+  linkText: {
+    color: "#BBBBBB",
+    fontSize: 14,
   },
 });
