@@ -136,8 +136,8 @@ const Home = ({ navigation }) => {
           <View style={styles.resultContainer}>
             <Text style={styles.resultText}>
               {similarityResult.result === "Duplicate"
-                ? "The sentences are similar ✅"
-                : "The sentences are not similar ❌"}
+                ? "The sentences are semantically same ✅"
+                : "The sentences are semantically different ❌"}
             </Text>
           </View>
         )}
