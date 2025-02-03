@@ -56,7 +56,7 @@ const Home = ({ navigation }) => {
         // Log the API response for debugging
         console.error("API Response:", error.response.data);
         alert(
-          `${
+          `Error: ${
             error.response.data.error ||
             "Failed to fetch similarity. Please try again."
           }`
@@ -135,7 +135,7 @@ const Home = ({ navigation }) => {
         {similarityResult && (
           <View style={styles.resultContainer}>
             <Text style={styles.resultText}>
-              {similarityResult.result === "Duplicate"
+              {similarityResult.similar
                 ? "The sentences are similar ✅"
                 : "The sentences are not similar ❌"}
             </Text>

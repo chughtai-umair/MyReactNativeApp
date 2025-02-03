@@ -1,50 +1,30 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  Button,
-  StyleSheet,
-} from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const WelcomeScreen = ({ navigation }) => {
-  const [loading, setLoading] = useState(true);
-  const [hasAccount, setHasAccount] = useState(false);
-
   useEffect(() => {
     const checkUser = async () => {
       try {
         const user = await AsyncStorage.getItem("user");
         if (user) {
-          setHasAccount(true);
+          navigation.replace("LogIn"); // Agar user saved hai to Login par bhejo
+        } else {
+          navigation.replace("SignIn"); // Agar user nahi mila to SignUp par bhejo
         }
       } catch (error) {
         console.log("Error checking user:", error);
+        navigation.replace("SignIn"); // Error ki surat me SignUp par bhejo
       }
-      setLoading(false);
     };
 
-    setTimeout(checkUser, 3000);
+    setTimeout(checkUser, 3000); // 3 sec loading delay
   }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="white" />
-        <Text style={styles.text}>Loading...</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome</Text>
-      {hasAccount ? (
-        <Button title="LogIn" onPress={() => navigation.navigate("LogIn")} />
-      ) : (
-        <Button title="SignUp" onPress={() => navigation.navigate("SignIn")} />
-      )}
+      <Text style={styles.projectName}>My Project</Text>
+      <ActivityIndicator size="large" color="white" />
     </View>
   );
 };
@@ -56,7 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  text: {
+  projectName: {
     color: "white",
     fontSize: 24,
     marginBottom: 20,

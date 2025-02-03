@@ -26,12 +26,24 @@ const SignIn = ({ navigation }) => {
     }
 
     try {
-      await AsyncStorage.setItem(
-        "user",
-        JSON.stringify({ username, email, password })
-      );
+      const usersData = await AsyncStorage.getItem("users");
+      let users = usersData ? JSON.parse(usersData) : [];
+
+      // Check if email already exists
+      const userExists = users.some((user) => user.email === email);
+      if (userExists) {
+        Alert.alert("Error", "Email already registered. Please log in.");
+        return;
+      }
+
+      // Add new user to array
+      users.push({ username, email, password });
+
+      // Save updated users array
+      await AsyncStorage.setItem("users", JSON.stringify(users));
+
       Alert.alert("Success", "Account Created Successfully!");
-      navigation.replace("Login");
+      navigation.replace("LogIn");
     } catch (error) {
       console.log("Error saving user:", error);
     }
@@ -93,20 +105,20 @@ export default SignIn;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000", // Black background
+    backgroundColor: "#000000",
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 32,
-    color: "#FFFFFF", // White text
+    color: "#FFFFFF",
     fontWeight: "bold",
     marginBottom: 30,
   },
   input: {
     width: "100%",
-    backgroundColor: "#1A1A1A", // Dark gray input background
+    backgroundColor: "#1A1A1A",
     color: "#FFFFFF",
     paddingVertical: 10,
     paddingHorizontal: 15,
@@ -117,7 +129,7 @@ const styles = StyleSheet.create({
     borderColor: "#444444",
   },
   button: {
-    backgroundColor: "#FFFFFF", // White button
+    backgroundColor: "#FFFFFF",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -126,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    color: "#000000", // Black text
+    color: "#000000",
     fontSize: 16,
     fontWeight: "bold",
   },

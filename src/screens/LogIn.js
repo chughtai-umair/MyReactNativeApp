@@ -21,25 +21,45 @@ const LogIn = ({ navigation }) => {
       setError("Please enter both email and password.");
       return;
     }
-
     try {
-      const storedUser = await AsyncStorage.getItem("user");
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
+      const usersData = await AsyncStorage.getItem("users");
+      let users = usersData ? JSON.parse(usersData) : [];
 
-        if (user.email === email && user.password === password) {
-          Alert.alert("Login Successful!", "Welcome back!");
-          navigation.replace("Home");
-        } else {
-          setError("Invalid email or password.");
-        }
+      // Check if user exists
+      const foundUser = users.find(
+        (user) => user.email === email && user.password === password
+      );
+
+      if (foundUser) {
+        await AsyncStorage.setItem("currentUser", JSON.stringify(foundUser));
+        Alert.alert("Success", "Logged in successfully!");
+        navigation.replace("Home");
       } else {
-        setError("No account found. Please sign up.");
+        setError("Invalid email or password.");
       }
     } catch (error) {
-      console.log("Error retrieving user:", error);
+      console.log("Error logging in:", error);
       setError("An error occurred. Please try again.");
     }
+
+    // try {
+    //   const storedUser = await AsyncStorage.getItem("user");
+    //   if (storedUser) {
+    //     const user = JSON.parse(storedUser);
+
+    //     if (user.email === email && user.password === password) {
+    //       Alert.alert("Login Successful!", "Welcome back!");
+    //       navigation.replace("Home");
+    //     } else {
+    //       setError("Invalid email or password.");
+    //     }
+    //   } else {
+    //     setError("No account found. Please sign up.");
+    //   }
+    // } catch (error) {
+    //   console.log("Error retrieving user:", error);
+    //   setError("An error occurred. Please try again.");
+    // }
   };
 
   return (
