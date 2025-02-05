@@ -23,7 +23,7 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.projectName}>My Project</Text>
+      <Text style={styles.projectName}>Loading...</Text>
       <ActivityIndicator size="large" color="white" />
     </View>
   );

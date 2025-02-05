@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
+  Button,
   KeyboardAvoidingView,
+  Modal,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -15,22 +17,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios"; // Import axios
 
 const Home = ({ navigation }) => {
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [responseCount, setResponseCount] = useState(0);
   const [sentence1, setSentence1] = useState(""); // State for first input
   const [sentence2, setSentence2] = useState(""); // State for second input
   const [similarityResult, setSimilarityResult] = useState(null); // Store API response
   const [loading, setLoading] = useState(false); // Loading state
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // Store user data
+  const [visible, setVisible] = useState(false); // Modal visibility
+  const show = () => setVisible(true); // Show modal
+  const hide = () => setVisible(false); // Hide modal
 
   const API_URL = "https://2c18-59-103-32-34.ngrok-free.app/predict"; // Replace with your ML model API URL
 
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets(); // Safe area insets
 
   useEffect(() => {
-    StatusBar.setBarStyle("dark-content");
-    StatusBar.setBackgroundColor("#FFFFFF");
-
     async function getData() {
       const userData = await AsyncStorage.getItem("currentUser");
       if (!userData) {
@@ -41,10 +42,6 @@ const Home = ({ navigation }) => {
     }
     getData();
   }, []);
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!isDropdownVisible);
-  };
 
   const handleCheckSimilarity = async () => {
     if (!sentence1 || !sentence2) {
@@ -90,10 +87,7 @@ const Home = ({ navigation }) => {
     >
       <KeyboardAvoidingView behavior="padding" style={styles.wrapper}>
         <View>
-          <TouchableOpacity
-            onPress={toggleDropdown}
-            style={styles.profileIconWrapper}
-          >
+          <TouchableOpacity onPress={show} style={styles.profileIconWrapper}>
             <View style={styles.profileIcon}>
               <Icon name="user" size={20} color="white" />
             </View>
@@ -105,6 +99,58 @@ const Home = ({ navigation }) => {
           <Text style={styles.subtitle}>Check similar queries</Text>
         </View>
 
+        {/* {isDropdownVisible && ( */}
+        <Modal visible={visible} transparent animationType="fade">
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              backgroundColor: "#000000aa",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#ffedd8",
+                padding: 30,
+                margin: 50,
+                borderRadius: 10,
+                width: "80%",
+                height: "30%",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.responseCountText}>
+                <Icon name="user" size={20} color="#a47148" />
+                {"  "}
+                {user ? user.username : "user not available"}
+              </Text>
+              <TouchableOpacity>
+                <Text
+                  style={styles.responseCountText}
+                  onPress={() => navigation.replace("LogIn")}
+                >
+                  Logout
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#ffff",
+                  paddingVertical: 10,
+                  alignItems: "center",
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: "#a47148",
+                }}
+                onPress={hide}
+              >
+                <Text style={styles.buttonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        {/* )} */}
+
+        {/* 
         {isDropdownVisible && (
           <View style={styles.dropdown}>
             <Text style={styles.dropdownItem}>
@@ -119,7 +165,7 @@ const Home = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -156,6 +202,44 @@ const Home = ({ navigation }) => {
           </View>
         )}
 
+        {/* <Modal visible={true} transparent animationType="slide">
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#000000aa",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#ffedd8",
+                padding: 30,
+                margin: 50,
+                borderRadius: 10,
+                width: "80%",
+                height: "30%",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={styles.responseCountText}>
+                Number of responses: {responseCount}
+              </Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#ffff",
+                  paddingVertical: 10,
+                  alignItems: "center",
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: "#a47148",
+                }}
+              >
+                <Text style={styles.buttonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal> */}
         <View style={styles.responseCountContainer}>
           <Text style={styles.responseCountText}>
             Number of responses: {responseCount}
@@ -172,7 +256,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffedd8",
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   wrapper: {
     flex: 1,
@@ -210,17 +294,8 @@ const styles = StyleSheet.create({
     color: "#a47148",
     marginTop: 10,
   },
-  dropdown: {
-    position: "absolute",
-    right: 20,
-    top: 70,
-    backgroundColor: "#a47148",
-    borderRadius: 8,
-    padding: 10,
-    width: 150,
-  },
   dropdownItem: {
-    color: "#FFFFFF",
+    color: "#a47148",
     fontSize: 16,
     paddingVertical: 10,
     textAlign: "center",
@@ -272,5 +347,6 @@ const styles = StyleSheet.create({
   responseCountText: {
     fontSize: 18,
     color: "#a47148",
+    textAlign: "center",
   },
 });

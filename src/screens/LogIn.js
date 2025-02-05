@@ -41,25 +41,6 @@ const LogIn = ({ navigation }) => {
       console.log("Error logging in:", error);
       setError("An error occurred. Please try again.");
     }
-
-    // try {
-    //   const storedUser = await AsyncStorage.getItem("user");
-    //   if (storedUser) {
-    //     const user = JSON.parse(storedUser);
-
-    //     if (user.email === email && user.password === password) {
-    //       Alert.alert("Login Successful!", "Welcome back!");
-    //       navigation.replace("Home");
-    //     } else {
-    //       setError("Invalid email or password.");
-    //     }
-    //   } else {
-    //     setError("No account found. Please sign up.");
-    //   }
-    // } catch (error) {
-    //   console.log("Error retrieving user:", error);
-    //   setError("An error occurred. Please try again.");
-    // }
   };
 
   return (
