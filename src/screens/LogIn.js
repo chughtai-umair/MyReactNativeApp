@@ -64,38 +64,40 @@ const LogIn = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <View style={styles.container2}>
+        <Text style={styles.title}>Login</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Email"
-        placeholderTextColor="#888888"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Email"
+          placeholderTextColor="#888888"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Password"
-        placeholderTextColor="#888888"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Password"
+          placeholderTextColor="#888888"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.linkButton}
-        onPress={() => navigation.navigate("SignIn")}
-      >
-        <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.linkButton}
+          onPress={() => navigation.navigate("SignIn")}
+        >
+          <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -105,40 +107,51 @@ export default LogIn;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000", // Black background
+    backgroundColor: "#a47148",
     justifyContent: "center",
     alignItems: "center",
+  },
+  container2: {
+    backgroundColor: "#ffedd8",
     padding: 20,
+    borderTopLeftRadius: 200,
+    borderBottomRightRadius: 200,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: 150,
+    marginTop: 40,
   },
   title: {
-    fontSize: 32,
-    color: "#FFFFFF", // White text
+    fontSize: 50,
+    color: "#a47148",
     fontWeight: "bold",
-    marginBottom: 30,
+    marginBottom: 40,
+    marginTop: 100,
   },
   input: {
     width: "100%",
-    backgroundColor: "#1A1A1A", // Dark gray input background
-    color: "#FFFFFF",
+    backgroundColor: "white",
+    color: "#a47148",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 50,
     marginBottom: 15,
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#444444",
+    borderWidth: 1.5,
+    borderColor: "#a47148",
   },
   button: {
-    backgroundColor: "#FFFFFF", // White button
+    backgroundColor: "#a47148",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 50,
     marginTop: 20,
     width: "100%",
     alignItems: "center",
   },
   buttonText: {
-    color: "#000000", // Black text
+    color: "#ffffff",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -151,7 +164,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   linkText: {
-    color: "#BBBBBB",
+    color: "#a47148",
     fontSize: 14,
   },
 });

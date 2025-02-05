@@ -51,51 +51,53 @@ const SignIn = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <View style={styles.container2}>
+        <Text style={styles.title}>Sign Up</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="User Name"
-        placeholderTextColor="#888888"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Email"
-        placeholderTextColor="#888888"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Password"
-        placeholderTextColor="#888888"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        placeholderTextColor="#888888"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="User Name"
+          placeholderTextColor="#888888"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Email"
+          placeholderTextColor="#888888"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Password"
+          placeholderTextColor="#888888"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          placeholderTextColor="#888888"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.navigate("LogIn")}
-      >
-        <Text style={styles.backButtonText}>
-          Already have an account? Login
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate("LogIn")}
+        >
+          <Text style={styles.backButtonText}>
+            Already have an account? Login
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -105,40 +107,51 @@ export default SignIn;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000",
+    backgroundColor: "#a47148",
     justifyContent: "center",
     alignItems: "center",
+  },
+  container2: {
+    backgroundColor: "#ffedd8",
     padding: 20,
+    borderTopLeftRadius: 200,
+    borderBottomRightRadius: 200,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: 100,
+    marginTop: 40,
   },
   title: {
-    fontSize: 32,
-    color: "#FFFFFF",
+    fontSize: 50,
+    color: "#a47148",
     fontWeight: "bold",
-    marginBottom: 30,
+    marginBottom: 40,
+    marginTop: 50,
   },
   input: {
     width: "100%",
-    backgroundColor: "#1A1A1A",
-    color: "#FFFFFF",
+    backgroundColor: "white",
+    color: "#a47148",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 50,
     marginBottom: 15,
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#444444",
+    borderWidth: 1.5,
+    borderColor: "#a47148",
   },
   button: {
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 12,
+    backgroundColor: "#a47148",
+    paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
-    marginTop: 10,
+    borderRadius: 50,
+    marginTop: 20,
     width: "100%",
     alignItems: "center",
   },
   buttonText: {
-    color: "#000000",
+    color: "#ffffff",
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -146,7 +159,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   backButtonText: {
-    color: "#BBBBBB",
+    color: "#a47148",
     fontSize: 14,
   },
 });

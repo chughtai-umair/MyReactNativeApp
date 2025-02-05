@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios"; // Import axios
 
 const Home = ({ navigation }) => {
@@ -20,14 +21,25 @@ const Home = ({ navigation }) => {
   const [sentence2, setSentence2] = useState(""); // State for second input
   const [similarityResult, setSimilarityResult] = useState(null); // Store API response
   const [loading, setLoading] = useState(false); // Loading state
+  const [user, setUser] = useState(null);
 
-  const API_URL = "https://82d2-59-103-32-34.ngrok-free.app/predict"; // Replace with your ML model API URL
+  const API_URL = "https://2c18-59-103-32-34.ngrok-free.app/predict"; // Replace with your ML model API URL
 
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
     StatusBar.setBarStyle("dark-content");
     StatusBar.setBackgroundColor("#FFFFFF");
+
+    async function getData() {
+      const userData = await AsyncStorage.getItem("currentUser");
+      if (!userData) {
+        navigation.replace("LogIn");
+      }
+      const parsedUser = JSON.parse(userData); // Convert string to object
+      setUser(parsedUser);
+    }
+    getData();
   }, []);
 
   const toggleDropdown = () => {
@@ -83,7 +95,7 @@ const Home = ({ navigation }) => {
             style={styles.profileIconWrapper}
           >
             <View style={styles.profileIcon}>
-              <Icon name="user" size={20} color="#000000" />
+              <Icon name="user" size={20} color="white" />
             </View>
           </TouchableOpacity>
         </View>
@@ -95,7 +107,9 @@ const Home = ({ navigation }) => {
 
         {isDropdownVisible && (
           <View style={styles.dropdown}>
-            <Text style={styles.dropdownItem}>Username</Text>
+            <Text style={styles.dropdownItem}>
+              {user ? user.username : "user not available"}
+            </Text>
             <TouchableOpacity>
               <Text
                 style={styles.dropdownItem}
@@ -157,14 +171,13 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#212121",
+    backgroundColor: "#ffedd8",
     paddingHorizontal: 20,
   },
   wrapper: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
   },
   header: {
     width: "100%",
@@ -174,41 +187,37 @@ const styles = StyleSheet.create({
   },
   profileIconWrapper: {
     position: "relative",
-    right: -130,
+    right: -140,
     top: -120,
   },
   profileIcon: {
     width: 40,
     height: 40,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#bc8a5f",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#000000",
+    borderColor: "#a47148",
   },
   title: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#F1F1F1",
+    color: "#a47148",
   },
   subtitle: {
     fontSize: 18,
-    color: "#B0B0B0",
+    color: "#a47148",
     marginTop: 10,
   },
   dropdown: {
     position: "absolute",
     right: 20,
     top: 70,
-    backgroundColor: "#333333",
+    backgroundColor: "#a47148",
     borderRadius: 8,
     padding: 10,
     width: 150,
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 5 },
   },
   dropdownItem: {
     color: "#FFFFFF",
@@ -221,9 +230,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   input: {
-    backgroundColor: "#2C2C2C",
-    color: "#F1F1F1",
-    borderColor: "#444444",
+    backgroundColor: "#ffff",
+    color: "#a47148",
+    borderColor: "#a47148",
     borderWidth: 1,
     borderRadius: 8,
     padding: 15,
@@ -231,16 +240,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#F1F1F1",
+    backgroundColor: "#ffff",
     paddingVertical: 15,
     paddingHorizontal: 30,
     alignItems: "center",
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#444444",
+    borderColor: "#a47148",
   },
   buttonText: {
-    color: "#212121",
+    color: "#a47148",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -262,6 +271,6 @@ const styles = StyleSheet.create({
   },
   responseCountText: {
     fontSize: 18,
-    color: "#F1F1F1",
+    color: "#a47148",
   },
 });
